@@ -55,11 +55,16 @@ RUN sudo git clone https://github.com/dapphub/token.git \
 RUN sudo mkdir project && cd project \
     && sudo git clone https://github.com/makerdao/sai.git \
     && cd sai \
-    && sudo make link
+    && sudo make link \
+    && sudo chown -R docker:docker /project \
+    && sudo chmod -R 755 /project
 
 ADD project /project
 
-RUN sudo apt-get install -y jshon \
+RUN cd /project/sai \
+    && npm install \
+    && dapp update \
+    && sudo apt-get install -y jshon \
     && sudo ln -s ~/.nix-profile/bin/seth /usr/local/bin/seth
 
 EXPOSE 80 443 8545
