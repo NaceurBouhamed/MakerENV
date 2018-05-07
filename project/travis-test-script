@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -ex
+nix-channel --add https://nix.dapphub.com/pkgs/dapphub
+nix-channel --update
+nix-env -iA dapphub.{dapp,seth,curl}
+make install
+make test

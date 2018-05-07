@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#4294967295
+export min=2.0
+export val=0.0
+
+while [ 1 -eq "$(echo "${val} < ${min}" | bc)" ]
+do
+	seth send $SAI_GEM 'mint(uint)' 4294967295
+	export val=$(token balance $SAI_GEM $ETH_FROM)
+	echo ${val}
+done

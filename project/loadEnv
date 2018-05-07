@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+cd sai/
+. load-fab-unknown
+. load-env-unknown
+. load-unknown
+
+
+#export ETH_FROM=${ETH_FROM:-$(seth rpc eth_coinbase)}
+#export ETH_RPC_ACCOUNTS=yes
+
+token approve $SAI_GEM $SAI_TUB $(seth --to-wei 1000000000 ETH)
+token approve $SAI_SKR $SAI_TUB $(seth --to-wei 1000000000 ETH)
+token approve $SAI_SAI $SAI_TUB $(seth --to-wei 1000000000 ETH)
+
+token approve $SAI_SKR $SAI_TAP $(seth --to-wei 1000000000 ETH)
+token approve $SAI_SAI $SAI_TAP $(seth --to-wei 1000000000 ETH)
+
+seth send $SAI_GEM 'mint(uint)' 1000000000
+
+token balance $SAI_GEM $ETH_FROM
+#export ETH_GAS=1000000
+sai join 0.000000001000000000
+
+token balance $SAI_SKR $ETH_FROM
+token balance $SAI_GEM $ETH_FROM
+
+
+
+# Open new cup
+set -e
+echo >&2 "Opening cup..."
+export SETH_ASYNC=yes
+tx=$(set -x; seth send "${SAI_TUB?}" "open()(bytes32)")
+export SETH_ASYNC=no
+echo >&2 -n "Waiting for transaction receipt..."
+number=$(SETH_TICK=true seth receipt "$tx" blockNumber)
+echo >&2
+seth rpc eth_getLogs -- -n {} -s "${SAI_TUB?}" -i address -n [] -s "$(seth keccak "$(seth --from-ascii 'LogNewCup(address,bytes32)')")" -i append -s "0x$(seth --to-uint256 "${ETH_FROM?}")" -i append -i topics -i append | echo "[$(paste -sd , -)]" | jshon -a -e data -u -p -e transactionHash -u | grep -B 1 "$tx" | head -1 | seth --to-dec | { read -r id; echo "Opened cup $id"; }
+#seth rpc eth_getLogs -- -n {} -s "${SAI_TUB?}" -i address -s "$number"  -i fromBlock -s "$number"  -i toBlock -n [] -s "$(seth keccak "$(seth --from-ascii 'LogNewCup(address,bytes32)')")" -i append -s "0x$(seth --to-uint256 "${ETH_FROM?}")" -i append -i topics -i append | echo "[$(paste -sd , -)]" | jshon -a -e data -u -p -e transactionHash -u | grep -B 1 "$tx" | head -1 | seth --to-dec | { read -r id; echo "Opened cup $id"; }
+
+cd ..

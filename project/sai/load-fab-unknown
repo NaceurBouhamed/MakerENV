@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# fab deployment on unknown from 56eed66bb42a485ff0819f4ca227f615b1eb5320
+# Mon  7 May 13:02:21 CET 2018
+
+export GEM_FAB=0xfd6a74b105971ed22c280008d863323706b6c735
+export VOX_FAB=0x5f1130876e32cd9eaa155077758bb109ad0bc0e7
+export TAP_FAB=0x5c980a2787d6b808d5e66c4bce0f6d19316bd00d
+export TUB_FAB=0x627cb6d4ef6b466f61d9d5f961db816952e6428c
+export TOP_FAB=0x36c48e82362aa6cddca3d8b9ad9060e6daaab3a3
+export MOM_FAB=0x6d7655f3323cb1faf022334942b3e2ee3d0f288b
+export DAD_FAB=0x947914b6785fcca6c48ec414d565015da4bf179a

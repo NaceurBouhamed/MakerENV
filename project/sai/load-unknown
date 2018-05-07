@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+export ETH_FROM=${ETH_FROM:-$(seth rpc eth_coinbase)}
+export ETH_RPC_ACCOUNTS=yes
+export ETH_GAS=1000000
